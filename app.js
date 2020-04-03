@@ -9,9 +9,10 @@ GAME RULES:
 
 */
 
- var scores,roundScore,activePlayer,dice,gamePlaying;
+ var scores,roundScore,activePlayer,dice,gamePlaying,countSix;
 
  init();
+  var lastDice;
 
  document.querySelector('.btn-roll').addEventListener('click',function () {
 
@@ -25,7 +26,15 @@ GAME RULES:
 
    starterRand = Math.floor(Math.random() * 2) + 1;
 
-   if (dice !== 1) {
+
+   if(dice === 6 && lastDice === 6){
+    scores[activePlayer] = 0;
+    document.querySelector('#score-' + activePlayer).textContent = '0';
+    nextPlayer();
+    console.log(lastDice);
+   }
+
+   else if (dice !== 1) {
 
     roundScore += dice;
     document.querySelector('#current-' + activePlayer).textContent = roundScore;
@@ -33,6 +42,8 @@ GAME RULES:
    } else {
     nextPlayer();
    }
+
+   lastDice = dice;
   }
 
    });
@@ -46,7 +57,17 @@ GAME RULES:
    //Update the UI
    document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
 
-   if(scores[activePlayer] >= 20){
+   var input = document.querySelector('.final-score').value;
+   var winningScore = 100;
+
+   if(input){
+    winningScore = input;
+   }
+   else{
+    winningScore = 100;
+   }
+
+   if(scores[activePlayer] >= winningScore){
     document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
     document.querySelector('.dice').style.display = 'none';
     document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
